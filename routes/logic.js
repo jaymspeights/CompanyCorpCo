@@ -60,8 +60,8 @@ router.get('/req/votes/new', function (req, res) {
           res.render('vote', v);
           return;
         }
+        res.send("Looks like you've seen every vote.");
       }
-      res.send("Looks like you've seen every vote.");
     });
   });
 })
@@ -70,13 +70,39 @@ router.get('/req/votes/cast', function (req, res) {
   var vote_id = req.query.vote_id;
   var id = parseInt(req.query.id);
   var vote = req.query.vote;
+  var type = req.query.type;
   getUserById(id, function (user) {
     if (user == null) {
       res.send("How did you even get here without a valid id?");
       return;
     }
-    var vote_data = {'_id':vote_id, 'vote':vote};
+    var body = type=="h"? "representatives":"senators";
+    db.collection(body).find({'name':{'$in' : user[body]}}).toArray(function (err, people) {
+      for (var person of people) {
+        db.collection('vote').findOne({'_id':vote_id}, function (err, data) {
+          for (var voter of data.votes) {
+            if (voter.name == person.name) {
+              var vote_data = {'_id':vote_id, 'vote':data};
+              if (person.votes==null)
+                person.votes = [vote_data];
+              else
+                for (var i = 0; i < person.votes.length; i++) {
+                  if (person.votes[i]._id == vote_id) {
+                    person.votes[i] = vote_data;
+                    break;
+                  }
+                  if (i == person.votes.length-1)
+                    person.votes.push(vote_data);
+                }
+              db.collection(body).update({'name':{'$in' : user[col]}}, {"$set":person}, {"upsert":true}, function () {
+              });
+            }
+          }
+        });
+      }
+    });
 
+    var vote_data = {'_id':vote_id, 'vote':vote};
     if (user.votes==null)
       user.votes = [vote_data];
     else
@@ -103,7 +129,6 @@ router.get('/req/votes/cast', function (req, res) {
             }
           if (!is_in) {
             res.render('vote', v);
-            return;
           }
         }
         res.send("Looks like you've seen every vote.");
