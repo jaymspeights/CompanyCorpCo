@@ -68,7 +68,7 @@ router.get('/req/votes/new', function (req, res) {
 
 router.get('/req/votes/cast', function (req, res) {
   var vote_id = req.query.vote_id;
-  var id = req.query.id;
+  var id = parseInt(req.query.id);
   var vote = req.query.vote;
   getUserById(id, function (user) {
     if (user == null) {
