@@ -13,7 +13,7 @@
 	};
 	let test = (pos)=>{
 		let coords = pos.coords;
-		$.get("req/reps?latlng="+coords.latitude+","+coords.longitude, (data)=>{
+		$.get("req/reps?latlng="+coords.latitude+","+coords.longitude+"&id="+id, (data)=>{
 			document.body.innerHTML = data;
 		});
 
