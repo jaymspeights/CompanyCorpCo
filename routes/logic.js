@@ -4,9 +4,40 @@ var request = require('request');
 var express = require('express');
 var router = express.Router();
 
-router.get('/req/reps/:lat/:lon', function(req, res) {
-  var lat = req.params.lat;
-  var lon = req.params.lon;
+var current_user_id;
+function getCurrentUserId() {
+  getNewId((id) => {
+    current_user_id = id;
+  });
+}
+
+function getNewId() {
+  //talk to database
+  //replace this data spoof
+  return 0;
+}
+
+function getMostRecentBill(cb) {
+  cb();
+}
+
+router.get('/req/id', function (req, res) => {
+  current_user_id += 1;
+  res.send({id:current_user_id});
+});
+
+router.get('/req/bills/new', function (req, res) => {
+  getMostRecentBill(function (err, data) => {
+    if (error) {
+      res.render('error', {message: 'Oops! Something went wrong...', error: err});
+      return;
+    }
+
+  });
+})
+
+router.get('/req/reps', function(req, res) {
+  var loc = req.query.latlng;
   var uri = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=${GOOGLE_API_KEY}`;
   request(uri, function (err, response, body) {
     if (err) {
@@ -21,8 +52,6 @@ router.get('/req/reps/:lat/:lon', function(req, res) {
         res.render('error', {message: 'Oops! Something went wrong...', error: err});
         return;
       }
-      console.log(sens);
-      console.log(reps);
       res.render('landing', {'sens': sens, 'reps':reps});
     });
   });
