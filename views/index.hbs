@@ -1,2 +1,17 @@
-<h1>{{title}}</h1>
-<p>Welcome to {{title}}</p>
+<link rel="stylesheet" href="/css/landing.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+	function getloc(){
+		navigator.geolocation.getCurrentPosition(test);
+	};
+	let test = (pos)=>{
+		let coords = pos.coords;
+		$.get("req/reps/"+coords.latitude+"/"+coords.longitude, (data)=>{
+			document.body = data;
+		});
+
+	};
+</script>
+
+<h1>Find your Representative</h1>
+	<input type="button" onclick="getloc()" value="Find by Location">
