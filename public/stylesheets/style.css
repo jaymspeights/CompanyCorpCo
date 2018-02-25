@@ -1,8 +1,36 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+@import url('https://fonts.googleapis.com/css?family=Mukta+Malar');
+*{
+	font-family: 'Mukta Malar', sans-serif;
 }
-
+body{
+	height: 100vh;
+	width: 100vw;
+}
 a {
   color: #00B7FF;
+}
+.center{
+	width: 100%;
+	text-align: center;
+	gridcol
+}
+input{
+	border: black solid 1px;
+	border-radius: 5px;
+	font-size: 6vmin;
+	padding: 0 10px;
+	margin: 0: 25px;
+	/* width: 25%; */
+};
+img{
+  max-height: 150px;
+	width:auto;
+}
+.know{
+	padding-top:25%;
+	font-size: 10vmin;
+}
+.congressman{
+	background-color: grey;
+	margin: 10px;
 }

@@ -29,10 +29,8 @@
     	function getpage(root,q,cb){
     		cb = cb || (()=>{});
     		q = q || "";
-    		$.get(root+"?id="+id+"&"+q, (data)=>{
-    			document.body.innerHTML = data;
-    			eval($(".pagesrc")[0].innerHTML);
-    		});
+    		document.location.href = root+"?id="+id+"&"+q
+
     	}
     	function findCookie(name){
     		s = document.cookie.split(";");
@@ -45,7 +43,7 @@
     		return undefined;
     	}
 
-    </script> 
+    </script>
     {{{body}}}
   </body>
 </html>

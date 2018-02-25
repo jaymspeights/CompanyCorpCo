@@ -1,9 +1,13 @@
-<link rel="stylesheet" href="/stylesheets/landing.css">
 <script type="text/javascript" class="pagesrc">
-  function vote(way){
-
-  }
 </script>
+<style media="screen">
+img{
+	max-height: 200px;
+}
+.name{
+	font-size: 7vmin;
+}
+</style>
 <ul id="congress">
   {{#each sens}}
     <li class="congressman" onclick="goto('{{name}}')">
@@ -17,5 +21,5 @@
       <span class="name {{party}}">{{name}}</span>
     </li>
   {{/each}}
-  <input type="button" name="" value="Check Yo Self" onclick="getpage('req/votes/new')">
+  <input type="button" name="" value="Check Yo Self" onclick="getpage('/req/votes/new')">
 </ul>
