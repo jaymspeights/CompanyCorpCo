@@ -76,6 +76,7 @@ router.get('/req/votes/cast', function (req, res) {
       return;
     }
     var vote_data = {'_id':vote_id, 'vote':vote};
+
     if (user.votes==null)
       user.votes = [vote_data];
     else
@@ -125,6 +126,7 @@ router.get('/req/reps', function(req, res) {
           res.render('error', {message: 'Oops! Something went wrong...', error: err});
           return;
         }
+        user.loc = loc;
     		body = JSON.parse(body);
         var addresses = body.results;
 
@@ -185,6 +187,7 @@ function getRepsFromApi(user, addresses, cb) {
       reps.push(body.officials[i]);
       user.representatives.push(body.officials[i].name);
     }
+
     db.collection('users').updateOne({"_id":user._id}, {"$set":user}, {"upsert":true}, function (err, res) {
       if (err) throw err;
       getRepsFromDb(user, function (sens, reps) {
