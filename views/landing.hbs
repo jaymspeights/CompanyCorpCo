@@ -5,13 +5,13 @@
 <ul id="congress">
   {{#each sens}}
     <li class="congressman" onclick="goto('{{name}}')">
-      <img alt="" src="{{photoUrl}}">
+      <img alt="" src="https://raw.githubusercontent.com/unitedstates/images/gh-pages/congress/original/{{id}}.jpg">
       <span class="name {{party}}" name="{{name}}">{{name}}</span>
     </li>
   {{/each}}
 	{{#each reps}}
     <li class="congressman" onclick="goto('{{name}}')">
-      <img src=" {{photoUrl}}" alt="">
+      <img src=" https://raw.githubusercontent.com/unitedstates/images/gh-pages/congress/original/{{id}}.jpg" alt="">
       <span class="name {{party}}">{{name}}</span>
     </li>
   {{/each}}

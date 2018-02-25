@@ -1,15 +1,14 @@
 <link rel="stylesheet" href="/css/landing.css">
 <script type="text/javascript">
-	var id = (()=>{
-		if(!findCookie("id")){
+	var id = findCookie("id");
+	$.get("/req/verify/id?id="+id, (data)=>{
+		if(data === 0){
 			$.get("/req/id",(data)=>{
 				document.cookie = "id="+data.id
 				id = parseInt(data.id);
 			})
-		} else {
-			return findCookie("id");
 		}
-	})()
+	});
 	function getloc(){
 		navigator.geolocation.getCurrentPosition(test);
 	};
