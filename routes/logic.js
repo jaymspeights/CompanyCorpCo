@@ -17,10 +17,6 @@ MongoClient.connect(uri, function (err, _db) {
   db = _db.db('KYR');
 });
 
-function getMostRecentBill(cb) {
-  cb();
-}
-
 function getUserById (id, cb) {
   db.collection('users').findOne({'_id':id}, function (err, user) {
     if (err) throw err;
@@ -40,14 +36,14 @@ router.get('/req/id', function (req, res) {
 
 });
 
-router.get('/req/bills/new', function (req, res) {
-  getMostRecentBill(function (err, data) {
-    if (error) {
-      res.render('error', {message: 'Oops! Something went wrong...', error: err});
-      return;
-    }
+router.get('/req/verify/id', function (req, res) {
+  var id = parseInt(req.query.id);
+  getUserById(id, function (user) {
+    res.send(user!=null?"1":"0");
+});
 
-  });
+router.get('/req/bills/new', function (req, res) {
+
 })
 
 router.get('/req/reps', function(req, res) {
