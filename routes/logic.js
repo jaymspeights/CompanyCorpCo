@@ -79,6 +79,7 @@ router.get('/req/votes/cast', function (req, res) {
     var body = type=="h"? "representatives":"senators";
     db.collection(body).find({'name':{'$in' : user[body]}}).toArray(function (err, people) {
       for (var person of people) {
+        console.log(vote_id);
         db.collection('vote').findOne({'_id':vote_id}, function (err, data) {
           for (var voter of data.votes) {
             if (voter.name == person.name) {

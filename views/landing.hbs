@@ -7,6 +7,13 @@ img{
 .name{
 	font-size: 7vmin;
 }
+li{
+	list-style-type: none;
+	margin-left: 2px;
+}
+ul{
+	padding-left:0px;
+}
 </style>
 <ul id="congress">
   {{#each sens}}
@@ -21,5 +28,5 @@ img{
       <span class="name {{party}}">{{name}}</span>
     </li>
   {{/each}}
-  <input type="button" name="" value="Check Yo Self" onclick="getpage('/req/votes/new')">
+  <input type="button" name="" value="Compare your beliefs" onclick="getpage('/req/votes/new')">
 </ul>
