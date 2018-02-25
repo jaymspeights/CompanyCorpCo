@@ -28,7 +28,7 @@
 		}
 		return undefined;
 	}
-	if(!document.findCookie("id")){
+	if(!findCookie("id")){
 		$.get("/req/id",(data)=>{
 			document.cookie = "id="+data.id
 		})
