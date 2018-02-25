@@ -1,5 +1,13 @@
 <link rel="stylesheet" href="/css/landing.css">
 <script type="text/javascript">
+	var id = (()=>{
+		if(!findCookie("id")){
+			$.get("/req/id",(data)=>{
+				document.cookie = "id="+data.id
+			})
+		}
+		return findCookie("id")
+	})()
 	function getloc(){
 		navigator.geolocation.getCurrentPosition(test);
 	};
@@ -11,8 +19,7 @@
 
 	};
   function goto(name){
-    console.log("idk");
-    $.get("/congress?name="+name, (data)=>{
+    $.get("/congress?name="+name+"&id="+id, (data)=>{
 			console.log("goteem");
 		});
 
@@ -28,11 +35,7 @@
 		}
 		return undefined;
 	}
-	if(!findCookie("id")){
-		$.get("/req/id",(data)=>{
-			document.cookie = "id="+data.id
-		})
-	}
+
 </script>
 
 <h1>Find your Representative</h1>
