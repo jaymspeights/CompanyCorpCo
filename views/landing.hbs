@@ -1,13 +1,16 @@
 <link rel="stylesheet" href="/stylesheets/landing.css">
+<script type="text/javascript">
+
+</script>
 <ul id="congress">
   {{#each sens}}
-    <li class="congressman">
+    <li class="congressman" onclick="goto('{{name}}')">
       <img alt="" src="{{photoUrl}}">
-      <span class="name {{party}}">{{name}}</span>
+      <span class="name {{party}}" name="{{name}}">{{name}}</span>
     </li>
   {{/each}}
 	{{#each reps}}
-    <li class="congressman">
+    <li class="congressman" onclick="goto('{{name}}')">
       <img src=" {{photoUrl}}" alt="">
       <span class="name {{party}}">{{name}}</span>
     </li>

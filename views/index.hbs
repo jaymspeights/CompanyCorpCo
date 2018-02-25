@@ -1,5 +1,4 @@
 <link rel="stylesheet" href="/css/landing.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript">
 	function getloc(){
 		navigator.geolocation.getCurrentPosition(test);
@@ -11,7 +10,30 @@
 		});
 
 	};
+  function goto(name){
+    console.log("idk");
+    $.get("/congress?name="+name, (data)=>{
+			console.log("goteem");
+		});
+
+  }
+	// getloc();
+	function findCookie(name){
+		s = document.cookie.split(";");
+		for(let i = 0; i < s.length; i++){
+			e = s[i].split("=");
+			if(e[0] == name){
+				return e[1];
+			}
+		}
+		return undefined;
+	}
+	if(!document.findCookie("id")){
+		$.get("/req/id",(data)=>{
+			document.cookie = "id="+data.id
+		})
+	}
 </script>
 
 <h1>Find your Representative</h1>
-	<input type="button" onclick="getloc()" value="Find by Location">
+<input type="button" onclick="getloc()" value="Find by Location">
