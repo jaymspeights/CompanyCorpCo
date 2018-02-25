@@ -2,7 +2,7 @@
 <script type="text/javascript">
 	var id = findCookie("id");
 	$.get("/req/verify/id?id="+id, (data)=>{
-		if(data === 0){
+		if(data == 0){
 			$.get("/req/id",(data)=>{
 				document.cookie = "id="+data.id
 				id = parseInt(data.id);
