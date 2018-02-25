@@ -66,6 +66,51 @@ router.get('/req/votes/new', function (req, res) {
   });
 })
 
+router.get('/req/votes/cast', function (req, res) {
+  var vote_id = req.query.vote_id;
+  var id = req.query.id;
+  var vote = req.query.vote;
+  getUserById(id, function (user) {
+    if (user == null) {
+      res.send("How did you even get here without a valid id?");
+      return;
+    }
+    var vote_data = {'_id':vote_id, 'vote':vote};
+    if (user.votes==null)
+      user.votes = [vote_data];
+    else
+      for (var i = 0; i < user.votes.length; i++) {
+        if (user.votes[i]._id == vote_id) {
+          user.votes[i] = vote_data;
+          break;
+        }
+        if (i == user.votes.length-1)
+          user.votes.push(vote_data);
+      }
+    db.collection('users').updateOne({"_id":user._id}, {"$set":user}, {"upsert":true}, function (err, response) {
+      if (err) throw err;
+      db.collection('votes').find({}).toArray(function(err, votes) {
+        if (err) throw err;
+        for (var v of votes) {
+          var is_in = false;
+          if (user.votes!=null)
+            for (var uv of user.votes) {
+              if (uv._id == v._id) {
+                is_in = true;
+                break;
+              }
+            }
+          if (!is_in) {
+            res.render('vote', v);
+            return;
+          }
+        }
+        res.send("Looks like you've seen every vote.");
+      });
+    });
+  });
+});
+
 router.get('/req/reps', function(req, res) {
   var id = parseInt(req.query.id);
   getUserById(id, function (user) {
@@ -144,7 +189,7 @@ function getRepsFromApi(user, addresses, cb) {
       if (err) throw err;
       getRepsFromDb(user, function (sens, reps) {
         cb(undefined, sens, reps);
-      })
+      });
     });
   });
 }
