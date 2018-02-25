@@ -1,2 +1,10 @@
+<script type="text/javascript">
+  function vote(way){
+    getpage("/req/votes/cast","vote_id={{_id}}&vode="+way)
+  }
+</script>
 <h2>{{title}}</h2>
 {{{summary}}}
+<input type="button" name="" value="nay" onclick="vote(-1)">
+<input type="button" name="" value="yay" onclick="vote(1)">
+<input type="button" name="" value="skip" onclick="vote(0)">    

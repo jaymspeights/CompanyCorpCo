@@ -5,7 +5,47 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
+
   <body>
+    <script type="text/javascript" class="pagesrc">
+    	var id = findCookie("id");
+    	$.get("/req/verify/id?id="+id, (data)=>{
+    		if(data == 0){
+    			$.get("/req/id",(data)=>{
+    				document.cookie = "id="+data.id
+    				id = parseInt(data.id);
+    			})
+    		}
+    	});
+    	function getloc(){
+    		navigator.geolocation.getCurrentPosition((pos)=>{
+    			let coords = pos.coords;
+    			let q = "latlng="+coords.latitude+","+coords.longitude
+    			getpage("req/reps",q)
+
+    		});
+    	};
+    	//the route to take, querystring, callback
+    	function getpage(root,q,cb){
+    		cb = cb || (()=>{});
+    		q = q || "";
+    		$.get(root+"?id="+id+"&"+q, (data)=>{
+    			document.body.innerHTML = data;
+    			eval($(".pagesrc")[0].innerHTML);
+    		});
+    	}
+    	function findCookie(name){
+    		s = document.cookie.split(";");
+    		for(let i = 0; i < s.length; i++){
+    			e = s[i].split("=");
+    			if(e[0] == name){
+    				return e[1];
+    			}
+    		}
+    		return undefined;
+    	}
+
+    </script> 
     {{{body}}}
   </body>
 </html>

@@ -1,43 +1,5 @@
 <link rel="stylesheet" href="/css/landing.css">
-<script type="text/javascript">
-	var id = findCookie("id");
-	$.get("/req/verify/id?id="+id, (data)=>{
-		if(data == 0){
-			$.get("/req/id",(data)=>{
-				document.cookie = "id="+data.id
-				id = parseInt(data.id);
-			})
-		}
-	});
-	function getloc(){
-		navigator.geolocation.getCurrentPosition(test);
-	};
-	let test = (pos)=>{
-		let coords = pos.coords;
-		$.get("req/reps?latlng="+coords.latitude+","+coords.longitude+"&id="+id, (data)=>{
-			document.body.innerHTML = data;
-		});
 
-	};
-  function goto(name){
-    $.get("/congress?name="+name+"&id="+id, (data)=>{
-			console.log("goteem");
-		});
-
-  }
-	// getloc();
-	function findCookie(name){
-		s = document.cookie.split(";");
-		for(let i = 0; i < s.length; i++){
-			e = s[i].split("=");
-			if(e[0] == name){
-				return e[1];
-			}
-		}
-		return undefined;
-	}
-
-</script>
 
 <h1>Find your Representative</h1>
 <input type="button" onclick="getloc()" value="Find by Location">
