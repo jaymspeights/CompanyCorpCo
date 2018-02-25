@@ -27,7 +27,7 @@ router.get('/req/id', function (req, res) {
 });
 
 router.get('/req/bills/new', function (req, res) {
-  getMostRecentBill(function (err, data) => {
+  getMostRecentBill(function (err, data) {
     if (error) {
       res.render('error', {message: 'Oops! Something went wrong...', error: err});
       return;
