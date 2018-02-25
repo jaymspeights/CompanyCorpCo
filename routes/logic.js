@@ -1,4 +1,3 @@
-var GOOGLE_API_KEY = 'AIzaSyC8Bkp_SWIgz2PRCyURtEXiXtZ2v9KcplQ';
 
 var fs = require('fs');
 var MongoClient = require('mongodb').MongoClient;
@@ -7,7 +6,7 @@ var request = require('request');
 var express = require('express');
 var db;
 var router = express.Router();
-
+var GOOGLE_API_KEY = fs.readFileSync('./google_api_key', 'utf8').replace('\n', '');
 var uri = fs.readFileSync('./db_uri', 'utf8').replace('\n', '');
 MongoClient.connect(uri, function (err, _db) {
   if (err) {
@@ -43,8 +42,28 @@ router.get('/req/verify/id', function (req, res) {
   });
 });
 
-router.get('/req/bills/new', function (req, res) {
-
+router.get('/req/votes/new', function (req, res) {
+  var id = parseInt(req.query.id);
+  getUserById(id, function (user) {
+    db.collection('votes').find({}).toArray(function(err, votes) {
+      if (err) throw err;
+      for (var v of votes) {
+        var is_in = false;
+        if (user.votes!=null)
+          for (var uv of user.votes) {
+            if (uv._id == v._id) {
+              is_in = true;
+              break;
+            }
+          }
+        if (!is_in) {
+          res.render('vote', v);
+          return;
+        }
+      }
+      res.send("Looks like you've seen every vote.");
+    });
+  });
 })
 
 router.get('/req/reps', function(req, res) {
