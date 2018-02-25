@@ -7,7 +7,7 @@
 	let test = (pos)=>{
 		let coords = pos.coords;
 		$.get("req/reps/"+coords.latitude+"/"+coords.longitude, (data)=>{
-			document.body = data;
+			document.body.innerHTML = data;
 		});
 
 	};
