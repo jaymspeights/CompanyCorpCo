@@ -1,1 +1,15 @@
-name address party
+<link rel="stylesheet" href="/stylesheets/landing.css">
+<ul id="congress">
+  {{#each sens}}
+    <li class="congressman">
+      <img alt="" src="{{photoUrl}}">
+      <span class="name {{party}}">{{name}}</span>
+    </li>
+  {{/each}}
+	{{#each reps}}
+    <li class="congressman">
+      <img src=" {{photoUrl}}" alt="">
+      <span class="name {{party}}">{{name}}</span>
+    </li>
+  {{/each}}
+</ul>
