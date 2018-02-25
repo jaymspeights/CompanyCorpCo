@@ -21,12 +21,12 @@ function getMostRecentBill(cb) {
   cb();
 }
 
-router.get('/req/id', function (req, res) => {
+router.get('/req/id', function (req, res) {
   current_user_id += 1;
   res.send({id:current_user_id});
 });
 
-router.get('/req/bills/new', function (req, res) => {
+router.get('/req/bills/new', function (req, res) {
   getMostRecentBill(function (err, data) => {
     if (error) {
       res.render('error', {message: 'Oops! Something went wrong...', error: err});
@@ -38,7 +38,7 @@ router.get('/req/bills/new', function (req, res) => {
 
 router.get('/req/reps', function(req, res) {
   var loc = req.query.latlng;
-  var uri = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=${GOOGLE_API_KEY}`;
+  var uri = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${loc}&key=${GOOGLE_API_KEY}`;
   request(uri, function (err, response, body) {
     if (err) {
       res.render('error', {message: 'Oops! Something went wrong...', error: err});
