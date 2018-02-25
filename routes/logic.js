@@ -17,43 +17,27 @@ MongoClient.connect(uri, function (err, _db) {
   db = _db.db('KYR');
 });
 
-var current_user_id;
-function getCurrentUserId() {
-  getNewId((id) => {
-    current_user_id = id;
-  });
-}
-
-function getNewId(cb) {
-  db.collection('users').count(function (err, count) {
-    if (err) {
-      console.log(err);
-      throw new Error(err);
-    }
-    cb(count)
-  });
-}
-
 function getMostRecentBill(cb) {
   cb();
 }
 
 function getUserById (id, cb) {
   db.collection('users').findOne({'_id':id}, function (err, user) {
-    if (err)
-      throw err;
+    if (err) throw err;
     cb(user)
   });
 }
 
 
 router.get('/req/id', function (req, res) {
-  current_user_id += 1;
-  db.collection('users').insertOne({'_id': current_user_id}, function (err, response) {
-    if (err)
-      throw err;
-    res.send({id:current_user_id});
+  db.collection('users').count({}, function (err, id) {
+    if (err) throw err;
+    db.collection('users').insertOne({'_id': id}, function (err, response) {
+      if (err) throw err;
+      res.send({'id':id});
+    });
   });
+
 });
 
 router.get('/req/bills/new', function (req, res) {
@@ -67,10 +51,9 @@ router.get('/req/bills/new', function (req, res) {
 })
 
 router.get('/req/reps', function(req, res) {
-  var id = req.query.id;
+  var id = parseInt(req.query.id);
   getUserById(id, function (user) {
-    console.log(user)
-    if (user == undefined) {
+    if (user == null) {
       res.render('error', {message: 'Oops! Something went wrong...', error: {status:"You don't have a user id yet.", stack: "Stop fucking around with our api."}});
       return;
     } else if (user.senators == undefined || user.representatives == undefined) {
@@ -92,14 +75,12 @@ router.get('/req/reps', function(req, res) {
           res.render('landing', {'sens': sens, 'reps':reps});
         });
       });
-    }
-    db.collection('senators').findAll({'id':{'$in' : user.senators}}, function (err, sens) {
-      if (err) throw err;
-      db.collection('representatives').findAll({'id':{'$in' : user.representatives}}, function (err, reps) {
-        if (err) throw err;
+    } else {
+      getRepsFromDb(user, function(sens, reps) {
         res.render('landing', {'sens': sens, 'reps':reps});
+
       });
-    });
+    }
   });
 });
 
@@ -132,19 +113,32 @@ function getRepsFromApi(user, addresses, cb) {
         reps_i = office.officialIndices;
       }
     }
-    //user.senators = [];
+
+    user.senators = [];
     for (var i of sens_i) {
       sens.push(body.officials[i]);
-      //user.senators.push(body.officials[i].id);
+      user.senators.push(body.officials[i].name);
     }
-    //user.representatives = [];
+    user.representatives = [];
     for (var i of reps_i) {
       reps.push(body.officials[i]);
-      //user.representatives.push(body.officials[i].id);
+      user.representatives.push(body.officials[i].name);
     }
     db.collection('users').updateOne({"_id":user._id}, {"$set":user}, {"upsert":true}, function (err, res) {
       if (err) throw err;
-      cb(undefined, sens, reps);
+      getRepsFromDb(user, function (sens, reps) {
+        cb(undefined, sens, reps);
+      })
+    });
+  });
+}
+
+function getRepsFromDb(user, cb) {
+  db.collection('senators').find({'name':{'$in' : user.senators}}).toArray(function (err, sens) {
+    if (err) throw err;
+    db.collection('representatives').find({'name':{'$in' : user.representatives}}).toArray(function (err, reps) {
+      if (err) throw err;
+      cb(sens, reps);
     });
   });
 }

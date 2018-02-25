@@ -4,9 +4,11 @@
 		if(!findCookie("id")){
 			$.get("/req/id",(data)=>{
 				document.cookie = "id="+data.id
+				id = parseInt(data.id);
 			})
+		} else {
+			return findCookie("id");
 		}
-		return findCookie("id")
 	})()
 	function getloc(){
 		navigator.geolocation.getCurrentPosition(test);
