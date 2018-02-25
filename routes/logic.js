@@ -40,6 +40,7 @@ router.get('/req/verify/id', function (req, res) {
   var id = parseInt(req.query.id);
   getUserById(id, function (user) {
     res.send(user!=null?"1":"0");
+  });
 });
 
 router.get('/req/bills/new', function (req, res) {
